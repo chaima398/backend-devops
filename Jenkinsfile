@@ -1,30 +1,36 @@
 pipeline {
     agent any
-
+ 
     tools {
         // Noms identiques à ceux configurés dans Administrer Jenkins > Tools (Atelier 3)
         jdk 'JAVA_HOME'
         maven 'M2_HOME'
     }
-
-          triggers {
+ 
+    triggers {
         githubPush()
         pollSCM('H/2 * * * *')
     }
-
+ 
     stages {
         stage('Checkout') {
             steps {
+                // Récupération du projet depuis GitHub (même config que le job)
                 checkout scm
             }
         }
+ 
+        stage('Tests unitaires') {
+            steps {
+                sh 'mvn clean test'
+            }
             post {
                 always {
                     junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
                 }
             }
         }
-
+ 
         stage('Package') {
             steps {
                 // Création du livrable (.jar) dans le dossier target
@@ -32,7 +38,7 @@ pipeline {
             }
         }
     }
-
+ 
     post {
         success {
             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
@@ -43,3 +49,4 @@ pipeline {
         }
     }
 }
+ 
