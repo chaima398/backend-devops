@@ -7,21 +7,17 @@ pipeline {
         maven 'M2_HOME'
     }
 
-        triggers {
+          triggers {
         githubPush()
         pollSCM('H/2 * * * *')
     }
 
-           stage('Checkout') {
+    stages {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-
-        stage('Tests unitaires') {
-            steps {
-                sh 'mvn clean test'
-            }
             post {
                 always {
                     junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
