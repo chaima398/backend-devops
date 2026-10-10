@@ -7,9 +7,9 @@ pipeline {
         maven 'M2_HOME'
     }
 
-    triggers {
-        // Déclenchement par webhook GitHub (push)
+        triggers {
         githubPush()
+        pollSCM('H/2 * * * *')
     }
 
     stages {
