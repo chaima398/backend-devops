@@ -12,11 +12,9 @@ pipeline {
         pollSCM('H/2 * * * *')
     }
 
-    stages {
-        stage('Checkout') {
+           stage('Checkout') {
             steps {
-                // Récupération du projet depuis GitHub
-                git branch: 'main', url: 'https://github.com/chaima398/backend-devops'
+                checkout scm
             }
         }
 
